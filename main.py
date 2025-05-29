@@ -5,7 +5,7 @@ import streamlit as st
 import pandas as pd
 from typing import List, Tuple
 
-# Personalization and Theming
+# Personalization and Theming CSS
 CSS = """
 <style>
 :root {
@@ -31,6 +31,7 @@ button {
 }
 </style>
 """
+
 
 def generate_pairs(n: int) -> List[Tuple[int, int]]:
     pairs = [(i, j) for i in range(n) for j in range(i + 1, n)]
@@ -59,15 +60,15 @@ def download_df(df: pd.DataFrame, filename: str = "prioritized_goals.csv") -> No
 
 
 def main() -> None:
-    # Inject custom CSS
-    st.markdown(CSS, unsafe_allow_html=True)
-
-    # Page config
+    # Page config must be first Streamlit command
     st.set_page_config(
         page_title="Paul Nolan's Prioritizer",
         page_icon="🔴",
         layout="wide"
     )
+
+    # Inject custom CSS after config
+    st.markdown(CSS, unsafe_allow_html=True)
 
     # Logging setup
     LOG_FILE = os.getenv("LOG_FILE", "prioritizer.log")
@@ -96,11 +97,13 @@ def main() -> None:
     # Input step
     if "goals" not in st.session_state or not st.session_state.goals:
         with st.form("goals_form"):
-            st.text_area("Your Goals",
-                         placeholder="Goal 1\nGoal 2\n...",
-                         height=200,
-                         max_chars=1000,
-                         key="goals_input")
+            st.text_area(
+                "Your Goals",
+                placeholder="Goal 1\nGoal 2\n...",
+                height=200,
+                max_chars=1000,
+                key="goals_input"
+            )
             if st.form_submit_button("Start Comparisons"):
                 goals = [g.strip() for g in st.session_state.goals_input.splitlines() if g.strip()]
                 if not 2 <= len(goals) <= 10:
@@ -138,8 +141,10 @@ def main() -> None:
     # Results step
     st.success("Done! Here's your ranking:")
     ranked = sorted(st.session_state.results.items(), key=lambda x: x[1], reverse=True)
-    df = pd.DataFrame([{"Rank": r+1, "Goal": st.session_state.goals[i], "Score": s}
-                        for r, (i, s) in enumerate(ranked)])
+    df = pd.DataFrame([
+        {"Rank": r+1, "Goal": st.session_state.goals[i], "Score": s}
+        for r, (i, s) in enumerate(ranked)
+    ])
     st.table(df)
     download_df(df)
 
