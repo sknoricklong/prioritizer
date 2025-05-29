@@ -5,11 +5,11 @@ import streamlit as st
 import pandas as pd
 from typing import List, Tuple
 
-# Personalization and Theming CSS (Harvard Crimson Palette)
+# Personalization and Theming CSS (Crimson Palette)
 CSS = """
 <style>
 :root {
-  --primary-color: #A51C30; /* Harvard Crimson */
+  --primary-color: #A51C30; /* Crimson */
   --background-color: #FFFFFF;
   --secondary-background-color: #F5F5F5; /* light gray */
   --text-color: #333333;
@@ -73,12 +73,12 @@ def download_df(df: pd.DataFrame, filename: str = "prioritized_goals.csv") -> No
 def main() -> None:
     # Page config must be first
     st.set_page_config(
-        page_title="Paul Nolan's Harvard Prioritizer",
-        page_icon="🎓",
+        page_title="Paul Nolan's Prioritizer",
+        page_icon="🔴",
         layout="wide"
     )
 
-    # Inject Harvard theme CSS
+    # Inject custom CSS
     st.markdown(CSS, unsafe_allow_html=True)
 
     # Logging setup
@@ -91,12 +91,14 @@ def main() -> None:
 
     # Sidebar personalization
     st.sidebar.header("Welcome, Paul Nolan")
-    st.sidebar.markdown("**Harvard Crimson Theme**")
     st.sidebar.markdown(
-        "**How it works:**
-        1. Enter 2–10 goals.
-        2. Compare them pairwise.
-        3. Download your prioritized list."
+        """
+        **Crimson Theme Enabled**  
+        **How it works:**  
+        1. Enter 2–10 goals.  
+        2. Compare them pairwise.  
+        3. Download your prioritized list.
+        """
     )
 
     # Initialize session
@@ -122,7 +124,7 @@ def main() -> None:
                     st.session_state.pairs = generate_pairs(len(goals))
                     st.session_state.results = {i: 0 for i in range(len(goals))}
                     st.session_state.current = 0
-                    logging.info(f"Paul Nolan started session with goals: {goals}")
+                    logging.info(f"Session started with goals: {goals}")
                     st.experimental_rerun()
         return
 
@@ -139,11 +141,11 @@ def main() -> None:
         c1, c2 = st.columns(2)
         if c1.button(opt_a):
             record_choice(i)
-            logging.info(f"Paul chose '{opt_a}' over '{opt_b}'")
+            logging.info(f"Chosen '{opt_a}' over '{opt_b}'")
             st.experimental_rerun()
         if c2.button(opt_b):
             record_choice(j)
-            logging.info(f"Paul chose '{opt_b}' over '{opt_a}'")
+            logging.info(f"Chosen '{opt_b}' over '{opt_a}'")
             st.experimental_rerun()
         return
 
@@ -158,7 +160,7 @@ def main() -> None:
     download_df(df)
 
     if st.button("Restart"):
-        logging.info("Paul reset the session.")
+        logging.info("Session reset by user.")
         reset_session()
         st.experimental_rerun()
 
