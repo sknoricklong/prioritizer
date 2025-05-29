@@ -5,14 +5,14 @@ import streamlit as st
 import pandas as pd
 from typing import List, Tuple
 
-# Personalization and Theming CSS
+# Personalization and Theming CSS (Harvard Crimson Palette)
 CSS = """
 <style>
 :root {
-  --primary-color: #DC143C;
+  --primary-color: #A51C30; /* Harvard Crimson */
   --background-color: #FFFFFF;
-  --secondary-background-color: #FFE4E1;
-  --text-color: #000000;
+  --secondary-background-color: #F5F5F5; /* light gray */
+  --text-color: #333333;
 }
 body {
   background-color: var(--secondary-background-color) !important;
@@ -20,14 +20,25 @@ body {
 .stApp {
   background-color: var(--background-color) !important;
 }
-h1, h2, h3, .css-1ilw2u2 {
+h1, h2, h3, .css-1v3fvcr {
   color: var(--primary-color) !important;
 }
-.css-1um9o0a, .css-1q8dd3e {
+.css-1k0szwh, .css-1cpxqw2 {
   background-color: var(--primary-color) !important;
+  color: #FFFFFF !important;
 }
-button {
+button, .stButton>button {
   background-color: var(--primary-color) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+}
+.stDownloadButton>button {
+  background-color: #FFFFFF !important;
+  color: var(--primary-color) !important;
+  border: 1px solid var(--primary-color) !important;
+}
+.css-1outpf7 {
+  color: var(--text-color) !important;
 }
 </style>
 """
@@ -60,14 +71,14 @@ def download_df(df: pd.DataFrame, filename: str = "prioritized_goals.csv") -> No
 
 
 def main() -> None:
-    # Page config must be first Streamlit command
+    # Page config must be first
     st.set_page_config(
-        page_title="Paul Nolan's Prioritizer",
-        page_icon="🔴",
+        page_title="Paul Nolan's Harvard Prioritizer",
+        page_icon="🎓",
         layout="wide"
     )
 
-    # Inject custom CSS after config
+    # Inject Harvard theme CSS
     st.markdown(CSS, unsafe_allow_html=True)
 
     # Logging setup
@@ -80,14 +91,12 @@ def main() -> None:
 
     # Sidebar personalization
     st.sidebar.header("Welcome, Paul Nolan")
-    st.sidebar.subheader("Crimson Theme Enabled")
+    st.sidebar.markdown("**Harvard Crimson Theme**")
     st.sidebar.markdown(
-        """
-        **How it works:**  
-        1. Enter 2–10 goals.  
-        2. Compare them pairwise.  
-        3. Download your prioritized list.
-        """
+        "**How it works:**
+        1. Enter 2–10 goals.
+        2. Compare them pairwise.
+        3. Download your prioritized list."
     )
 
     # Initialize session
